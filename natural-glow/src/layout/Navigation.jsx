@@ -1,68 +1,94 @@
-import React, { useState } from "react";
-import { FiMenu, FiX } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
 
-const Navigation = () => {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Navigation() {
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Products", href: "#features" },
-    { name: "Contact", href: "#contact" },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <>
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white shadow-md backdrop-blur-md"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container flex items-center justify-between py-4">
+        {/* Logo / Brand Name */}
+        <h1 className="text-2xl font-heading font-bold text-emerald-600">
+          Organic<span className="text-emerald-800">Glow</span>
+        </h1>
 
-      <nav className="hidden md:flex items-center space-x-10 text-gray-700 font-medium">
-        {navLinks.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            className="hover:text-emerald-500 transition-colors duration-300"
-          >
-            {link.name}
-          </a>
-        ))}
-      </nav>
+        {/* Navigation Links */}
+        <ul className="hidden md:flex space-x-8 font-medium text-gray-700">
+          <li>
+            <a
+              href="#hero"
+              className="hover:text-emerald-600 transition-colors duration-300"
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <a
+              href="#features"
+              className="hover:text-emerald-600 transition-colors duration-300"
+            >
+              Features
+            </a>
+          </li>
+          <li>
+            <a
+              href="#about"
+              className="hover:text-emerald-600 transition-colors duration-300"
+            >
+              About
+            </a>
+          </li>
+          <li>
+            <a
+              href="#contact"
+              className="hover:text-emerald-600 transition-colors duration-300"
+            >
+              Contact
+            </a>
+          </li>
+        </ul>
 
-      
-      <button
-        className="md:hidden text-gray-800"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-      </button>
+        {/* CTA Button */}
+        <a
+          href="#shop"
+          className="hidden md:inline-block btn btn-primary shadow-soft"
+        >
+          Shop Now
+        </a>
 
-    
-      {isOpen && (
-        <div className="absolute top-20 left-0 w-full bg-white shadow-md border-t border-gray-100 md:hidden animate-fadeIn">
-          <ul className="flex flex-col items-center space-y-4 py-6 text-gray-800 font-medium">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  className="hover:text-emerald-500 transition-colors duration-300"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href="#contact"
-                className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-md transition-all duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Shop Now
-              </a>
-            </li>
-          </ul>
+        {/* Mobile Menu Placeholder */}
+        <div className="md:hidden">
+          <button className="text-emerald-700 focus:outline-none">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
         </div>
-      )}
-    </>
+      </div>
+    </nav>
   );
-};
-
-export default Navigation;
+}
